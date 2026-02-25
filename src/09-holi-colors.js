@@ -54,21 +54,55 @@
  *   // red and blue objects are UNCHANGED
  */
 export function mixColors(color1, color2) {
-  // Your code here
+  if (!color1 || !color2) return null;
+  const mixedObj = {
+    name: `${color1.name}-${color2.name}`,
+    r: Math.round((color1.r + color2.r) / 2),
+    g: Math.round((color1.g + color2.g) / 2),
+    b: Math.round((color1.b + color2.b) / 2),
+  };
+  return mixedObj;
 }
 
 export function adjustBrightness(color, factor) {
-  // Your code here
+  if (!color || typeof factor != "number") return null;
+  const newObj = {
+    name: color.name,
+    r: Math.min(Math.round(color.r * factor), 255),
+    g: Math.min(Math.round(color.g * factor), 255),
+    b: Math.min(Math.round(color.b * factor), 255),
+  };
+  return newObj;
 }
 
 export function addToPalette(palette, color) {
-  // Your code here
+  if (!Array.isArray(palette)) return [color];
+  if (!color || typeof color !== "object") return structuredClone(palette);
+
+  const newArr = structuredClone(palette);
+  newArr.push(color);
+  return newArr;
 }
 
 export function removeFromPalette(palette, colorName) {
-  // Your code here
+  if (!Array.isArray(palette)) return [];
+  const newArr = structuredClone(palette);
+
+  return newArr.filter((e) => e.name != colorName);
 }
 
 export function mergePalettes(palette1, palette2) {
-  // Your code here
+  if (!palette1) palette1 = [];
+
+  if (!palette2) palette2 = [];
+  const clone1 = [...palette1];
+  const clone2 = [...palette2];
+  clone1.forEach(({ name }) => {
+    let isDuplicate = false;
+    clone2.forEach((nameObj) => {
+      if (name === nameObj.name) isDuplicate = true;
+    });
+    if (!isDuplicate && clone2.length !== 0) clone1.push(clone2.shift());
+  });
+  return clone1;
 }

@@ -45,13 +45,64 @@
  *   pricer("gold", true)  // => 200 * 1.5 * 1.3 = 390
  */
 export function createDialogueWriter(genre) {
-  // Your code here
+  if (
+    genre !== "action" &&
+    genre !== "romance" &&
+    genre !== "comedy" &&
+    genre !== "drama"
+  ) {
+    return null;
+  }
+
+  return function (hero, villain) {
+    if (!hero || !villain) {
+      return "...";
+    }
+
+    if (genre === "action") {
+      return hero + " says: 'Tujhe toh main dekh lunga, " + villain + "!'";
+    }
+
+    if (genre === "romance") {
+      return hero + " whispers: '" + villain + ", tum mere liye sab kuch ho'";
+    }
+
+    if (genre === "comedy") {
+      return hero + " laughs: '" + villain + " bhai, kya kar rahe ho yaar!'";
+    }
+
+    if (genre === "drama") {
+      return hero + " cries: '" + villain + ", tune mera sab kuch cheen liya!'";
+    }
+  };
 }
 
 export function createTicketPricer(basePrice) {
-  // Your code here
+  if (basePrice <= 0) return null;
+  return (seatType, isWeekend = false) => {
+    if (seatType !== "silver" && seatType !== "gold" && seatType !== "platinum")
+      return null;
+    let seatObj = {
+      silver: 1,
+      gold: 1.5,
+      platinum: 2,
+    };
+    let multipliedPrice = basePrice * seatObj[seatType];
+    let weekendAddedPrice = isWeekend ? 1.3 : 1;
+    return multipliedPrice * weekendAddedPrice;
+  };
 }
 
 export function createRatingCalculator(weights) {
-  // Your code here
+  if (!weights || typeof weights !== "object") return null;
+
+  return (scores) => {
+    let totalScore = 0;
+
+    for (let key in weights) {
+      totalScore += scores[key] * weights[key];
+    }
+
+    return Number(totalScore.toFixed(1));
+  };
 }
